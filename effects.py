@@ -1,17 +1,20 @@
 #!/usr/bin/python
+import sys
 import numpy
 import math
 
-#!/usr/bin/python
 import tesser
-import math
 
-tesser = tesser.Tesser()
+sys.path.append('effects')
+import echo
 
-def effect(sampleIndex, chunkSampleIndex, raw, output):
-    output[chunkSampleIndex] = output[chunkSampleIndex] * math.cos(2*math.pi*400*sampleIndex/tesser.inrate)
+tesser = tesser.Tesser(300, 8000, 8	000)
 
-tesser.signalHandlers.append(effect)
+# def effect(sampleIndex, chunkIndex, bufferIndex, raw, output, tesser):
+#     output[chunkIndex] = output[chunkIndex] * math.cos(2*math.pi*400*sampleIndex/tesser.inrate)
+
+# tesser.signalHandlers.append(effect)
+tesser.signalHandlers.append(echo.create(5, 0.1, .5))
 tesser.start()
 
 raw_input('Press any key to exit!')
