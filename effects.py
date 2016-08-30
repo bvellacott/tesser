@@ -6,15 +6,21 @@ import math
 import tesser
 
 sys.path.append('effects')
+import volume
 import echo
+import addSin
+import sinOverride
 
-tesser = tesser.Tesser(300, 8000, 8000)
+tesser = tesser.Tesser(300, 8000, 80)
 
-# def effect(sampleIndex, chunkIndex, bufferIndex, raw, output, tesser):
-#     output[chunkIndex] = output[chunkIndex] * math.cos(2*math.pi*400*sampleIndex/tesser.inrate)
+def effect(sampleIndex, chunkIndex, bufferIndex, output, tesser):
+  output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*200.0))) / 4
 
+tesser.signalHandlers.append(volume.create(0.5))
+tesser.signalHandlers.append(echo.create(0.2, 0.4))
+tesser.signalHandlers.append(addSin.create(100, 0.5))
+tesser.signalHandlers.append(sinOverride.create(400))
 # tesser.signalHandlers.append(effect)
-tesser.signalHandlers.append(echo.create(1, 0.1, .5))
 tesser.start()
 
 raw_input('Press any key to exit!')

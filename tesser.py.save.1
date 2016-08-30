@@ -36,7 +36,7 @@ class Tesser:
         self.silence = chr(0)*self.chunkSize*self.inchannels*2
 
 
-    def addToBuffer(self, raw, output):
+    def addToBuffer(self, raw):
         self.rawBuffer.append(raw)
         self.outputBuffer.append(output)
         if len(self.rawBuffer) > self.bufferSize:
@@ -61,8 +61,7 @@ class Tesser:
         if in_data == '':
             in_data = self.silence
         raw = numpy.fromstring(in_data, dtype=formatDataType.get(self.informat))
-        output = raw.copy()
-        self.addToBuffer(raw, output)
+        self.addToBuffer(raw)
         for handler in self.signalHandlers:
             bufferIndex = self.getBufferLength() - self.chunkSize
 	    sampleIndex = self.sampleIndex 
