@@ -21,9 +21,9 @@ tesser = tesser.Tesser(bufferLength=300, rate=rate, chunkSize=chunkSize)
 
 tesser.signalHandlers.append(aggregate.create([
     # volume.create(0.25),
-    echo.create(delay=0.2, volume=0.4),
-    # addSin.create(Hz=40, volume=0.01, rate=rate),
-    sinOverride.create(Hz400, raterate)
+    echo.create(0.2, 0.4),
+    # addSin.create(40, 0.01, rate),
+    sinOverride.create(400, rate)
     ]))
 tesser.start()
 
