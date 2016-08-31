@@ -421,16 +421,16 @@ static const char *__pyx_f[] = {
 /*--- Type declarations ---*/
 struct __pyx_obj_6addSin___pyx_scope_struct__create;
 
-/* "addSin.pyx":6
+/* "addSin.pyx":5
  * # hZ stands for wavelength or oscillations per second -> 1 hZ will do on oscillation in one second
  * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):             # <<<<<<<<<<<<<<
+ * def create(hZ, volume, rate):             # <<<<<<<<<<<<<<
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
  */
 struct __pyx_obj_6addSin___pyx_scope_struct__create {
   PyObject_HEAD
-  PyObject *__pyx_v_hZ;
+  PyObject *__pyx_v_scalar;
   PyObject *__pyx_v_volume;
 };
 
@@ -632,7 +632,7 @@ int __pyx_module_is_main_addSin = 0;
 
 /* Implementation of 'addSin' */
 static PyObject *__pyx_pf_6addSin_6create_do(PyObject *__pyx_self, PyObject *__pyx_v_sampleIndex, PyObject *__pyx_v_chunkIndex, CYTHON_UNUSED PyObject *__pyx_v_bufferIndex, PyObject *__pyx_v_output, PyObject *__pyx_v_tesser); /* proto */
-static PyObject *__pyx_pf_6addSin_create(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_hZ, PyObject *__pyx_v_volume); /* proto */
+static PyObject *__pyx_pf_6addSin_create(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_hZ, PyObject *__pyx_v_volume, PyObject *__pyx_v_rate); /* proto */
 static PyObject *__pyx_tp_new_6addSin___pyx_scope_struct__create(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static char __pyx_k_do[] = "do";
 static char __pyx_k_hZ[] = "hZ";
@@ -646,6 +646,7 @@ static char __pyx_k_addSin[] = "addSin";
 static char __pyx_k_create[] = "create";
 static char __pyx_k_import[] = "__import__";
 static char __pyx_k_output[] = "output";
+static char __pyx_k_scalar[] = "scalar";
 static char __pyx_k_tesser[] = "tesser";
 static char __pyx_k_volume[] = "volume";
 static char __pyx_k_sampleMax[] = "sampleMax";
@@ -670,6 +671,7 @@ static PyObject *__pyx_n_s_pi;
 static PyObject *__pyx_n_s_rate;
 static PyObject *__pyx_n_s_sampleIndex;
 static PyObject *__pyx_n_s_sampleMax;
+static PyObject *__pyx_n_s_scalar;
 static PyObject *__pyx_n_s_sin;
 static PyObject *__pyx_n_s_tesser;
 static PyObject *__pyx_n_s_test;
@@ -680,12 +682,12 @@ static PyObject *__pyx_tuple__3;
 static PyObject *__pyx_codeobj__2;
 static PyObject *__pyx_codeobj__4;
 
-/* "addSin.pyx":6
+/* "addSin.pyx":5
  * # hZ stands for wavelength or oscillations per second -> 1 hZ will do on oscillation in one second
  * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):             # <<<<<<<<<<<<<<
+ * def create(hZ, volume, rate):             # <<<<<<<<<<<<<<
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
  */
 
 /* Python wrapper */
@@ -694,6 +696,7 @@ static PyMethodDef __pyx_mdef_6addSin_1create = {"create", (PyCFunction)__pyx_pw
 static PyObject *__pyx_pw_6addSin_1create(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_hZ = 0;
   PyObject *__pyx_v_volume = 0;
+  PyObject *__pyx_v_rate = 0;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -701,12 +704,13 @@ static PyObject *__pyx_pw_6addSin_1create(PyObject *__pyx_self, PyObject *__pyx_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("create (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_hZ,&__pyx_n_s_volume,0};
-    PyObject* values[2] = {0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_hZ,&__pyx_n_s_volume,&__pyx_n_s_rate,0};
+    PyObject* values[3] = {0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
         case  0: break;
@@ -720,30 +724,37 @@ static PyObject *__pyx_pw_6addSin_1create(PyObject *__pyx_self, PyObject *__pyx_
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_volume)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("create", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  2:
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_rate)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("create", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
     __pyx_v_hZ = values[0];
     __pyx_v_volume = values[1];
+    __pyx_v_rate = values[2];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("create", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("create", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("addSin.create", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_6addSin_create(__pyx_self, __pyx_v_hZ, __pyx_v_volume);
+  __pyx_r = __pyx_pf_6addSin_create(__pyx_self, __pyx_v_hZ, __pyx_v_volume, __pyx_v_rate);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
@@ -751,10 +762,10 @@ static PyObject *__pyx_pw_6addSin_1create(PyObject *__pyx_self, PyObject *__pyx_
 }
 
 /* "addSin.pyx":7
- * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):
+ * def create(hZ, volume, rate):
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):             # <<<<<<<<<<<<<<
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
+ *     output[chunkIndex] += tesser.sampleMax * math.sin(sampleIndex * scalar) * volume
  *   return do
  */
 
@@ -860,7 +871,6 @@ static PyObject *__pyx_pf_6addSin_6create_do(PyObject *__pyx_self, PyObject *__p
   PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
   PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -869,9 +879,9 @@ static PyObject *__pyx_pf_6addSin_6create_do(PyObject *__pyx_self, PyObject *__p
   __pyx_cur_scope = __pyx_outer_scope;
 
   /* "addSin.pyx":8
- * def create(hZ, volume):
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume             # <<<<<<<<<<<<<<
+ *     output[chunkIndex] += tesser.sampleMax * math.sin(sampleIndex * scalar) * volume             # <<<<<<<<<<<<<<
  *   return do
  */
   __Pyx_INCREF(__pyx_v_chunkIndex);
@@ -885,51 +895,33 @@ static PyObject *__pyx_pf_6addSin_6create_do(PyObject *__pyx_self, PyObject *__p
   __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_sin); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_math); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_cur_scope->__pyx_v_scalar)) { __Pyx_RaiseClosureNameError("scalar"); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;} }
+  __pyx_t_5 = PyNumber_Multiply(__pyx_v_sampleIndex, __pyx_cur_scope->__pyx_v_scalar); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_pi); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_7, __pyx_v_sampleIndex); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_tesser, __pyx_n_s_rate); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_7);
-  if (unlikely(!__pyx_cur_scope->__pyx_v_hZ)) { __Pyx_RaiseClosureNameError("hZ"); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;} }
-  __pyx_t_8 = PyNumber_Multiply(__pyx_int_2, __pyx_cur_scope->__pyx_v_hZ); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_9 = __Pyx_PyNumber_Divide(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_9);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_9); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-  __pyx_t_9 = NULL;
+  __pyx_t_7 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_9)) {
+    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_6);
+    if (likely(__pyx_t_7)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_9);
+      __Pyx_INCREF(__pyx_t_7);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_6, function);
     }
   }
-  if (!__pyx_t_9) {
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_8); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+  if (!__pyx_t_7) {
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_5); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_4);
   } else {
-    __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_9); __Pyx_GIVEREF(__pyx_t_9); __pyx_t_9 = NULL;
-    PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_8);
-    __Pyx_GIVEREF(__pyx_t_8);
-    __pyx_t_8 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_8);
+    PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_7); __Pyx_GIVEREF(__pyx_t_7); __pyx_t_7 = NULL;
+    PyTuple_SET_ITEM(__pyx_t_8, 0+1, __pyx_t_5);
+    __Pyx_GIVEREF(__pyx_t_5);
+    __pyx_t_5 = 0;
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   }
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_t_6 = PyNumber_Multiply(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -949,10 +941,10 @@ static PyObject *__pyx_pf_6addSin_6create_do(PyObject *__pyx_self, PyObject *__p
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "addSin.pyx":7
- * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):
+ * def create(hZ, volume, rate):
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):             # <<<<<<<<<<<<<<
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
+ *     output[chunkIndex] += tesser.sampleMax * math.sin(sampleIndex * scalar) * volume
  *   return do
  */
 
@@ -968,7 +960,6 @@ static PyObject *__pyx_pf_6addSin_6create_do(PyObject *__pyx_self, PyObject *__p
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_AddTraceback("addSin.create.do", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -977,20 +968,22 @@ static PyObject *__pyx_pf_6addSin_6create_do(PyObject *__pyx_self, PyObject *__p
   return __pyx_r;
 }
 
-/* "addSin.pyx":6
+/* "addSin.pyx":5
  * # hZ stands for wavelength or oscillations per second -> 1 hZ will do on oscillation in one second
  * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):             # <<<<<<<<<<<<<<
+ * def create(hZ, volume, rate):             # <<<<<<<<<<<<<<
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
  */
 
-static PyObject *__pyx_pf_6addSin_create(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_hZ, PyObject *__pyx_v_volume) {
+static PyObject *__pyx_pf_6addSin_create(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_hZ, PyObject *__pyx_v_volume, PyObject *__pyx_v_rate) {
   struct __pyx_obj_6addSin___pyx_scope_struct__create *__pyx_cur_scope;
   PyObject *__pyx_v_do = 0;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1001,18 +994,40 @@ static PyObject *__pyx_pf_6addSin_create(CYTHON_UNUSED PyObject *__pyx_self, PyO
     return NULL;
   }
   __Pyx_GOTREF(__pyx_cur_scope);
-  __pyx_cur_scope->__pyx_v_hZ = __pyx_v_hZ;
-  __Pyx_INCREF(__pyx_cur_scope->__pyx_v_hZ);
-  __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_hZ);
   __pyx_cur_scope->__pyx_v_volume = __pyx_v_volume;
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_volume);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_volume);
 
-  /* "addSin.pyx":7
+  /* "addSin.pyx":6
  * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):
+ * def create(hZ, volume, rate):
+ *   scalar = math.pi/(rate/(2*hZ))             # <<<<<<<<<<<<<<
+ *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):
+ *     output[chunkIndex] += tesser.sampleMax * math.sin(sampleIndex * scalar) * volume
+ */
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_math); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_pi); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyNumber_Multiply(__pyx_int_2, __pyx_v_hZ); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_v_rate, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_GIVEREF(__pyx_t_1);
+  __pyx_cur_scope->__pyx_v_scalar = __pyx_t_1;
+  __pyx_t_1 = 0;
+
+  /* "addSin.pyx":7
+ * def create(hZ, volume, rate):
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):             # <<<<<<<<<<<<<<
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
+ *     output[chunkIndex] += tesser.sampleMax * math.sin(sampleIndex * scalar) * volume
  *   return do
  */
   __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_6addSin_6create_1do, 0, __pyx_n_s_create_locals_do, ((PyObject*)__pyx_cur_scope), __pyx_n_s_addSin, __pyx_d, ((PyObject *)__pyx_codeobj__2)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -1022,7 +1037,7 @@ static PyObject *__pyx_pf_6addSin_create(CYTHON_UNUSED PyObject *__pyx_self, PyO
 
   /* "addSin.pyx":9
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
+ *     output[chunkIndex] += tesser.sampleMax * math.sin(sampleIndex * scalar) * volume
  *   return do             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
@@ -1030,17 +1045,19 @@ static PyObject *__pyx_pf_6addSin_create(CYTHON_UNUSED PyObject *__pyx_self, PyO
   __pyx_r = __pyx_v_do;
   goto __pyx_L0;
 
-  /* "addSin.pyx":6
+  /* "addSin.pyx":5
  * # hZ stands for wavelength or oscillations per second -> 1 hZ will do on oscillation in one second
  * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):             # <<<<<<<<<<<<<<
+ * def create(hZ, volume, rate):             # <<<<<<<<<<<<<<
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
   __Pyx_AddTraceback("addSin.create", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -1071,7 +1088,7 @@ static PyObject *__pyx_tp_new_6addSin___pyx_scope_struct__create(PyTypeObject *t
 static void __pyx_tp_dealloc_6addSin___pyx_scope_struct__create(PyObject *o) {
   struct __pyx_obj_6addSin___pyx_scope_struct__create *p = (struct __pyx_obj_6addSin___pyx_scope_struct__create *)o;
   PyObject_GC_UnTrack(o);
-  Py_CLEAR(p->__pyx_v_hZ);
+  Py_CLEAR(p->__pyx_v_scalar);
   Py_CLEAR(p->__pyx_v_volume);
   if (CYTHON_COMPILING_IN_CPYTHON && ((__pyx_freecount_6addSin___pyx_scope_struct__create < 8) & (Py_TYPE(o)->tp_basicsize == sizeof(struct __pyx_obj_6addSin___pyx_scope_struct__create)))) {
     __pyx_freelist_6addSin___pyx_scope_struct__create[__pyx_freecount_6addSin___pyx_scope_struct__create++] = ((struct __pyx_obj_6addSin___pyx_scope_struct__create *)o);
@@ -1083,8 +1100,8 @@ static void __pyx_tp_dealloc_6addSin___pyx_scope_struct__create(PyObject *o) {
 static int __pyx_tp_traverse_6addSin___pyx_scope_struct__create(PyObject *o, visitproc v, void *a) {
   int e;
   struct __pyx_obj_6addSin___pyx_scope_struct__create *p = (struct __pyx_obj_6addSin___pyx_scope_struct__create *)o;
-  if (p->__pyx_v_hZ) {
-    e = (*v)(p->__pyx_v_hZ, a); if (e) return e;
+  if (p->__pyx_v_scalar) {
+    e = (*v)(p->__pyx_v_scalar, a); if (e) return e;
   }
   if (p->__pyx_v_volume) {
     e = (*v)(p->__pyx_v_volume, a); if (e) return e;
@@ -1095,8 +1112,8 @@ static int __pyx_tp_traverse_6addSin___pyx_scope_struct__create(PyObject *o, vis
 static int __pyx_tp_clear_6addSin___pyx_scope_struct__create(PyObject *o) {
   PyObject* tmp;
   struct __pyx_obj_6addSin___pyx_scope_struct__create *p = (struct __pyx_obj_6addSin___pyx_scope_struct__create *)o;
-  tmp = ((PyObject*)p->__pyx_v_hZ);
-  p->__pyx_v_hZ = Py_None; Py_INCREF(Py_None);
+  tmp = ((PyObject*)p->__pyx_v_scalar);
+  p->__pyx_v_scalar = Py_None; Py_INCREF(Py_None);
   Py_XDECREF(tmp);
   tmp = ((PyObject*)p->__pyx_v_volume);
   p->__pyx_v_volume = Py_None; Py_INCREF(Py_None);
@@ -1200,6 +1217,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_rate, __pyx_k_rate, sizeof(__pyx_k_rate), 0, 0, 1, 1},
   {&__pyx_n_s_sampleIndex, __pyx_k_sampleIndex, sizeof(__pyx_k_sampleIndex), 0, 0, 1, 1},
   {&__pyx_n_s_sampleMax, __pyx_k_sampleMax, sizeof(__pyx_k_sampleMax), 0, 0, 1, 1},
+  {&__pyx_n_s_scalar, __pyx_k_scalar, sizeof(__pyx_k_scalar), 0, 0, 1, 1},
   {&__pyx_n_s_sin, __pyx_k_sin, sizeof(__pyx_k_sin), 0, 0, 1, 1},
   {&__pyx_n_s_tesser, __pyx_k_tesser, sizeof(__pyx_k_tesser), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
@@ -1215,10 +1233,10 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
   /* "addSin.pyx":7
- * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):
+ * def create(hZ, volume, rate):
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):             # <<<<<<<<<<<<<<
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
+ *     output[chunkIndex] += tesser.sampleMax * math.sin(sampleIndex * scalar) * volume
  *   return do
  */
   __pyx_tuple_ = PyTuple_Pack(5, __pyx_n_s_sampleIndex, __pyx_n_s_chunkIndex, __pyx_n_s_bufferIndex, __pyx_n_s_output, __pyx_n_s_tesser); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -1226,17 +1244,17 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple_);
   __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(5, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_benjamin_Desktop_projects, __pyx_n_s_do, 7, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "addSin.pyx":6
+  /* "addSin.pyx":5
  * # hZ stands for wavelength or oscillations per second -> 1 hZ will do on oscillation in one second
  * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):             # <<<<<<<<<<<<<<
+ * def create(hZ, volume, rate):             # <<<<<<<<<<<<<<
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
  */
-  __pyx_tuple__3 = PyTuple_Pack(4, __pyx_n_s_hZ, __pyx_n_s_volume, __pyx_n_s_do, __pyx_n_s_do); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__3 = PyTuple_Pack(6, __pyx_n_s_hZ, __pyx_n_s_volume, __pyx_n_s_rate, __pyx_n_s_scalar, __pyx_n_s_do, __pyx_n_s_do); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
-  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_benjamin_Desktop_projects, __pyx_n_s_create, 6, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_benjamin_Desktop_projects, __pyx_n_s_create, 5, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -1332,7 +1350,7 @@ PyMODINIT_FUNC PyInit_addSin(void)
   /*--- Variable export code ---*/
   /*--- Function export code ---*/
   /*--- Type init code ---*/
-  if (PyType_Ready(&__pyx_type_6addSin___pyx_scope_struct__create) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_6addSin___pyx_scope_struct__create) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_6addSin___pyx_scope_struct__create.tp_print = 0;
   __pyx_ptype_6addSin___pyx_scope_struct__create = &__pyx_type_6addSin___pyx_scope_struct__create;
   /*--- Type import code ---*/
@@ -1340,33 +1358,32 @@ PyMODINIT_FUNC PyInit_addSin(void)
   /*--- Function import code ---*/
   /*--- Execution code ---*/
 
-  /* "addSin.pyx":2
- * #!/usr/bin/python
+  /* "addSin.pyx":1
  * import math             # <<<<<<<<<<<<<<
  * 
  * # hZ stands for wavelength or oscillations per second -> 1 hZ will do on oscillation in one second
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_math, 0, -1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 2; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_math, 0, -1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_math, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 2; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_math, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "addSin.pyx":6
+  /* "addSin.pyx":5
  * # hZ stands for wavelength or oscillations per second -> 1 hZ will do on oscillation in one second
  * # volume: 0 for silent and 1 for maximum volume - anything above that won't sound like a sine wave
- * def create(hZ, volume):             # <<<<<<<<<<<<<<
+ * def create(hZ, volume, rate):             # <<<<<<<<<<<<<<
+ *   scalar = math.pi/(rate/(2*hZ))
  *   def do(sampleIndex, chunkIndex, bufferIndex, output, tesser):
- *     output[chunkIndex] += tesser.sampleMax * math.sin(math.pi*sampleIndex/(tesser.rate/(2*hZ))) * volume
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_6addSin_1create, NULL, __pyx_n_s_addSin); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_6addSin_1create, NULL, __pyx_n_s_addSin); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_create, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_create, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "addSin.pyx":1
- * #!/usr/bin/python             # <<<<<<<<<<<<<<
- * import math
+ * import math             # <<<<<<<<<<<<<<
  * 
+ * # hZ stands for wavelength or oscillations per second -> 1 hZ will do on oscillation in one second
  */
   __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);

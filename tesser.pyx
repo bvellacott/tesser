@@ -19,7 +19,7 @@ class Tesser:
     self.inputDevice = inputDevice
     self.outputDevice = outputDevice
 
-    self.chunkSize = 160
+    self.chunkSize = chunkSize
     self.bufferLength = bufferLength
     self.bufferSize = rate*bufferLength/self.chunkSize
     self.outputBuffer = []
@@ -29,6 +29,7 @@ class Tesser:
     self.rate = rate
 
     self.signalHandlers = []
+    self.chunkHandlers = []
 
     self.silence = chr(0)*self.chunkSize*self.channels*2
     self.lastUnread = self.silence
@@ -86,6 +87,11 @@ class Tesser:
                   tesser=self)
           sampleIndex += 1
           bufferIndex += 1
+      for handler in self.chunkHandlers:
+        for i in xrange(self.chunkSize):
+          handler(firstSampleIndex=self.sampleIndex,
+                  output=output,
+                  tesser=self)
       self.sampleIndex += self.chunkSize
       self.addCompletedChunk(output.tostring())
       return

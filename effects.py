@@ -12,13 +12,18 @@ import addSin
 import sinOverride
 import aggregate
 
-tesser = tesser.Tesser(300, 8000, 800)
+# if you are experiencing buffer underrun problems, lower the rate and/or increase the chunkSize
+# decreases the rate decreases the quality and increasing the chunkSize increases the latency
+rate = 16000
+chunkSize = 320
+
+tesser = tesser.Tesser(bufferLength=300, rate=rate, chunkSize=chunkSize)
 
 tesser.signalHandlers.append(aggregate.create([
     # volume.create(0.25),
-    echo.create(0.2, 0.4),
-    # addSin.create(20, 0.1),
-    sinOverride.create(400)
+    echo.create(delay=0.2, volume=0.4),
+    # addSin.create(Hz=40, volume=0.01, rate=rate),
+    sinOverride.create(Hz400, raterate)
     ]))
 tesser.start()
 
