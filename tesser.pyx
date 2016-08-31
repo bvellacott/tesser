@@ -3,8 +3,7 @@ import pyaudio
 import numpy
 import math
 
-
-
+lock = threading.Lock()
 
 class Tesser:
   formatDataType = {
@@ -16,7 +15,10 @@ class Tesser:
     pyaudio.paUInt8: numpy.uint8
   }
 
-  def __init__(self, bufferLength=300, rate=16000, chunkSize=160):
+  def __init__(self, bufferLength=300, rate=16000, chunkSize=160, inputDevice=None, outputDevice=None):
+    self.inputDevice = inputDevice
+    self.outputDevice = outputDevice
+
     self.chunkSize = 160
     self.bufferLength = bufferLength
     self.bufferSize = rate*bufferLength/self.chunkSize
@@ -30,7 +32,7 @@ class Tesser:
 
     self.silence = chr(0)*self.chunkSize*self.channels*2
     self.lastUnread = self.silence
-    self.completedChunks = [self.silence, self.silence]
+    self.completedChunks = []
 
 
   def addToBuffer(self, output):
@@ -58,11 +60,15 @@ class Tesser:
     return len(self.outputBuffer)*self.chunkSize
 
   def addCompletedChunk(self, chunk):
+    lock.acquire()
     self.completedChunks.append(chunk)
+    lock.release()
 
   def getUnreadChunk(self):
+    lock.acquire()
     if len(self.completedChunks) > 0:
       self.lastUnread = self.completedChunks.pop(0)
+    lock.release()
     return self.lastUnread
 
   def inHandler(self, in_data, frame_count=None, time_info=None, status=None):
@@ -106,50 +112,13 @@ class Tesser:
                         input=True,
                         output=True,
                         frames_per_buffer=self.chunkSize,#)
-                        # input_device_index=2,
+                        input_device_index=self.inputDevice,
+                        output_device_index=self.outputDevice,
                         stream_callback=self.inHandler)
 
-#        self.inStream.start_stream()
-#        self.outStream.start_stream()
-
-#	while True:
-#	    data = self.inStream.read(self.chunkSize)
-#	    self.chunkHandler(data)
+    self.inStream.write(chr(0)*self.inStream.get_write_available()*self.channels*2)
 
   def stop(self):
-    #self.outputBuffer = None
     self.inStream.stop_stream()
     self.inStream.close()
-    self.outStream.stop_stream()
-    self.outStream.close()
     self.pAudio.terminate()
-
-
-#import pyaudio
-#import time
-
-#WIDTH = 2
-#CHANNELS = 2
-#RATE = 44100
-
-#p = pyaudio.PyAudio()
-
-#def cb(in_data, frame_count, time_info, status):
-#  return (in_data, pyaudio.paContinue)
-
-#stream = p.open(format=p.get_format_from_width(WIDTH),
-#                channels=CHANNELS,
-#                rate=RATE,
-#                input=True,
-#                output=True,
-#                stream_callback=cb)
-
-#stream.start_stream()
-
-#while stream.is_active():
-#  time.sleep(0.1)
-
-#stream.stop_stream()
-#stream.close()
-
-#p.terminate()
